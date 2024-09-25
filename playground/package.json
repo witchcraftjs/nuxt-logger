@@ -1,0 +1,16 @@
+{
+	"private": true,
+	"name": "@witchcraft/nuxt-logger-playground",
+	"type": "module",
+	"scripts": {
+		"dev": "nuxi dev",
+		"build": "nuxi build",
+		"generate": "nuxi generate"
+	},
+	"dependencies": {
+		"nuxt": "^4.0.1",
+		"pino": "^9.4.0",
+		"pino-pretty": "^11.2.2",
+		"@witchcraft/nuxt-logger": "link:../"
+	}
+}
