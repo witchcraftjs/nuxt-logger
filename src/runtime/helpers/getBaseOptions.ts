@@ -84,7 +84,7 @@ export function getBaseOptions(config: PublicRuntimeConfig["logger"]): {
 				transmit: isElectronClient
 				? {
 					level: logLevel,
-					send(level, logEvent) {
+					send: (level, logEvent) => {
 						if (!logEvent.messages[0]?.ns?.startsWith("main") && levels.values[level] < levels.values[writeLevel]) {
 							logEvent.messages[0].ns &&= `renderer:${logEvent.messages[0].ns}`
 							;(window as any).electron.api.log(logEvent)
