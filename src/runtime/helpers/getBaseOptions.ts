@@ -1,7 +1,11 @@
+import { get } from "@alanscodelog/utils/get.js"
 import { keys } from "@alanscodelog/utils/keys.js"
 import { readable } from "@alanscodelog/utils/readable.js"
+import { set } from "@alanscodelog/utils/set.js"
+import { walk } from "@alanscodelog/utils/walk.js"
 import type { PublicRuntimeConfig } from "@nuxt/schema"
 import pino, { type LoggerOptions, type TransportMultiOptions } from "pino"
+import {inspect} from "@alanscodelog/utils/inspect.js"
 
 // normally we would access logger.levels, but because we create
 // the shared config here we can't
@@ -27,20 +31,27 @@ const levels = {
 
 const isElectronClient = (typeof window !== "undefined" && "electron" in window && window.electron)
 
-export function getBaseOptions(config: PublicRuntimeConfig["logger"]): {
-	opts: LoggerOptions
-	browserOpts: LoggerOptions
-	transports: TransportMultiOptions
-	debug: {
-		logPath: string
-		writeLevel: string
-		logLevel: string
-	}
-} {
+export function getBaseOptions(
+	config: PublicRuntimeConfig["logger"],
+): {
+		opts: LoggerOptions
+		browserOpts: LoggerOptions
+		transports: TransportMultiOptions
+		debug: {
+			logPath: string
+			writeLevel: string
+			logLevel: string
+		}
+	} {
 	// @ts-expect-error the path is wrong on electron's client side
 	// but it's not used anyways
 	if (isElectronClient) { delete config.logPath }
-	const { redact, logPath } = config
+	const {
+		redact,
+		logPath,
+		additionalServerTransportTargets,
+		disabledServerTransportTargets
+	} = config
 	const validLevels = keys(levels.values)
 	if (process.env.LOG_LEVEL && !validLevels.includes(process.env.LOG_LEVEL as any)) {
 		throw new Error(`logLevel is not a valid level: ${readable(validLevels)}`)
@@ -63,6 +74,22 @@ export function getBaseOptions(config: PublicRuntimeConfig["logger"]): {
 		?? process.env.LOG_LEVEL as any
 		?? (import.meta.dev ? "debug" : undefined)
 		?? "debug"
+
+	const processedAdditionalServerTransportTargets = []
+	for (const target of additionalServerTransportTargets ?? []) {
+		const propPaths = (target as any)._loadFromEnv as string[]
+		// we have to clone because we can't write to runtimeConfig
+		const clone = walk(target, undefined, { save: true })
+		processedAdditionalServerTransportTargets.push(clone)
+		for (const propPath of propPaths) {
+			const splitPath = propPath.split(".")
+			if (propPath) {
+				set(clone, splitPath, process.env[get(clone, splitPath)])
+			}
+		}
+		delete (clone as any)._loadFromEnv
+	}
+
 	return {
 		debug: {
 			logPath,
@@ -110,7 +137,9 @@ export function getBaseOptions(config: PublicRuntimeConfig["logger"]): {
 						colorize: true,
 					},
 				},
-			],
+				...(processedAdditionalServerTransportTargets ?? []),
+			// not sure when target doesn't exist, #future investigate
+			].filter(t => !disabledServerTransportTargets?.includes((t as any).target)),
 		},
 	}
 }

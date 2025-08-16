@@ -13,11 +13,12 @@ import {
 import { defu } from "defu"
 import fs from "fs/promises"
 import path from "path"
+import type { TransportMultiOptions } from "pino"
 
 
 declare module "@nuxt/schema" {
 	interface PublicRuntimeConfig {
-		logger: Pick<ModuleOptions, "redact"> & {
+		logger: Pick<ModuleOptions, "redact" | "additionalServerTransportTargets" | "disabledServerTransportTargets"> & {
 			logPath: string
 		}
 	}
@@ -36,7 +37,53 @@ export interface ModuleOptions {
 	appName?: string
 	/** @default false */
 	enableServerRequestLogging?: boolean
+	/**
+	 * Additional transport targets to add to the server transport.
+	 * File and console + pino-pretty are added by default. See disabledServerTransportTargets for disabling a transport.
+	 *
+	 * Since some transports will require options, but passing them via the nuxt config will hard code them, there is an additional `_loadFromEnv` property that can list a list of dot seperated properties to load from `process.env`.
+	 *
+	 * For example, to add `pino-loki`:
+	 * ```ts
+	 * additionalServerTransportTargets: [
+	 *		{
+	 *			target: "pino-loki",
+	 *			_loadFromEnv: ["options.host", "options.basicAuth.username", "options.basicAuth.password"],
+	 *			options: {
+	 *				//...
+	 *				labels: {
+	 * 				// set additional labels
+	 *					application: "...",
+	 * 			},
+	 * 			propsToLabels: ["level", ...don't forget to set your labels ],
+	 * 			replaceTimestamp: true, // loki requires timestamps in a specific format
+	 *				host: "PINO_LOKI_HOST",
+	 *				basicAuth: {
+	 * 				// don't forget the quotes!
+	 *					username: "PINO_LOKI_BASIC_AUTH_USERNAME",
+	 *					password: "PINO_LOKI_BASIC_AUTH_PASSWORD",
+	 *				},
+	 *			},
+	 *		},
+	 * ]
+	 * ```
+	 * The location for the auth part on grafana cloud is confusing as fuck, leaving this here for posterity.
+	 *
+	 * Go to https://grafana.com/orgs/YOURORGHERE/stacks => Details => Loki => Send Logs
+	 *
+	 * There you can get the user and create a token with write access and it sets the right stuff. It will then appear in https://YOURORGHERE.grafana.net/a/grafana-auth-app
+	 *
+	 * If nothing is erroring, you should be able to see grafana receiving logs in Drilldown => Logs => Logs (https://YOURORGHERE.grafana.net/drilldown).
+	 *
+	 * You can then create a dashboard based on your labels.
+	 */
+	additionalServerTransportTargets?: (TransportMultiOptions["targets"][number] & {
+		_loadFromEnv: string[]
+	})[]
+	/** Disable a transport target by it's target name. */
+	disabledServerTransportTargets?: string[]
 }
+
 export default defineNuxtModule<ModuleOptions>({
 	meta: {
 		name: "logger",
@@ -56,6 +103,8 @@ export default defineNuxtModule<ModuleOptions>({
 			`req["sec-websocket-key"]`,
 		] as string[],
 		enableServerRequestLogging: false,
+		additionalServerTransportTargets: [],
+		disabledServerTransportTargets: [],
 	},
 	async setup(options, nuxt) {
 		const { resolve } = createResolver(import.meta.url)
@@ -82,6 +131,8 @@ export default defineNuxtModule<ModuleOptions>({
 			{
 				redact: options.redact,
 				logPath: nuxt.options.dev ? options.devServerLogPath : options.serverLogPath,
+				additionalServerTransportTargets: options.additionalServerTransportTargets,
+				disabledServerTransportTargets: options.disabledServerTransportTargets,
 			}
 		)
 		if (nuxt.options.modules.includes("@witchcraft/nuxt-electron")) {
@@ -95,14 +146,12 @@ export default defineNuxtModule<ModuleOptions>({
 		// they are needed, otherwise I can't seem to get the imports to resolve correctly
 		// see also runtime/server/createUseLogger.ts
 		nuxt.options.build.transpile.push(resolve("./runtime"))
-		nuxt.options.build.transpile.push(resolve("./runtime/server/plugins/init"))
 		nuxt.options.build.transpile.push(resolve("./runtime/server/middleware/log"))
 		nuxt.options.build.transpile.push(resolve("./runtime/server/utils/useServerLogger"))
 
 		addImportsDir(resolve("./runtime/composables"))
 		addServerImportsDir(resolve("./runtime/server/utils"))
 
-		addServerPlugin(resolve("./runtime/server/plugins/init"))
 		if (options.enableServerRequestLogging) {
 			addServerHandler({
 				middleware: true,
