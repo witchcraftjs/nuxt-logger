@@ -144,10 +144,14 @@ export default defineNuxtModule<ModuleOptions>({
 		}
 		// the server files require transpilation to use #imports and #logger
 		// they are needed, otherwise I can't seem to get the imports to resolve correctly
-		// see also runtime/server/createUseLogger.ts
-		nuxt.options.build.transpile.push(resolve("./runtime"))
-		nuxt.options.build.transpile.push(resolve("./runtime/server/middleware/log"))
-		nuxt.options.build.transpile.push(resolve("./runtime/server/utils/useServerLogger"))
+		// see also runtime/shared/createUseLogger.ts
+		for (const file of [
+			"./runtime",
+			"./runtime/server/middleware/log",
+			"./runtime/server/utils/useServerLogger",
+		]) {
+			nuxt.options.build.transpile.push(resolve(file))
+		}
 
 		addImportsDir(resolve("./runtime/composables"))
 		addServerImportsDir(resolve("./runtime/server/utils"))

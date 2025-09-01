@@ -1,8 +1,8 @@
 import type { RuntimeConfig } from "nuxt/schema"
-import pino, { type Logger, type TransportMultiOptions } from "pino"
+import {pino, type Logger } from "pino"
 
-import { getBaseOptions } from "./helpers/getBaseOptions.js"
-import type { Levels } from "./types.js"
+import { getBaseOptions } from "../helpers/getBaseOptions.js"
+import type { Levels } from "../types.js"
 
 
 export type BaseLogger = Record<Levels, ((data: any) => void)> & {

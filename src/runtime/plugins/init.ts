@@ -1,3 +1,6 @@
+import { defineNuxtPlugin, useRuntimeConfig } from "#imports"
+
+import { useLogger } from "../composables/useLogger"
 
 export default defineNuxtPlugin({
 	name: "client-init-log",
