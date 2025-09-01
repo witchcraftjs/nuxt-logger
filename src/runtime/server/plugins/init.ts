@@ -10,7 +10,7 @@ export default defineNitroPlugin(_nitroApp => {
 		osVersion: os.release(),
 		arch: os.arch(),
 		nodeVersion: process.version,
-		cpu: cpus?.[0].model,
+		cpu: cpus?.[0]?.model,
 		cpus: cpus.length,
 		totalMem: os.totalmem(),
 	}

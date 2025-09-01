@@ -1,4 +1,4 @@
-import { enumFromArray } from "@alanscodelog/utils/enumFromArray.js"
+import { enumFromArray } from "@alanscodelog/utils/enumFromArray"
 import { type EnumLike } from "@alanscodelog/utils"
 
 export const ELECTRON_LOG_TYPE = enumFromArray([

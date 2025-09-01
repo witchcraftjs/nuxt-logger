@@ -1,11 +1,11 @@
-import { get } from "@alanscodelog/utils/get.js"
-import { keys } from "@alanscodelog/utils/keys.js"
-import { readable } from "@alanscodelog/utils/readable.js"
-import { set } from "@alanscodelog/utils/set.js"
-import { walk } from "@alanscodelog/utils/walk.js"
+import { get } from "@alanscodelog/utils/get"
+import { keys } from "@alanscodelog/utils/keys"
+import { readable } from "@alanscodelog/utils/readable"
+import { set } from "@alanscodelog/utils/set"
+import { walk } from "@alanscodelog/utils/walk"
 import type { PublicRuntimeConfig } from "@nuxt/schema"
-import pino, { type LoggerOptions, type TransportMultiOptions } from "pino"
-import {inspect} from "@alanscodelog/utils/inspect.js"
+import  { type LoggerOptions, type TransportMultiOptions } from "pino"
+import {pino} from "pino"
 
 // normally we would access logger.levels, but because we create
 // the shared config here we can't
@@ -87,6 +87,7 @@ export function getBaseOptions(
 		const contexts = (target as any)._contexts as string[]
 		const contextMatches = contexts === undefined || contexts.find(c => thisContexts.includes(c))
 		if (!contextMatches) continue
+
 		const propPaths = (target as any)._loadFromEnv as string[]
 		// we have to clone because we can't write to runtimeConfig
 		const clone = walk(target, undefined, { save: true })

@@ -1,9 +1,8 @@
-import { keys } from "@alanscodelog/utils/keys.js"
+import { keys } from "@alanscodelog/utils/keys"
 import { type PublicRuntimeConfig } from "@nuxt/schema"
 import { app, type BrowserWindow } from "electron"
 import path from "path"
-
-import pino, { type Logger } from "pino"
+import { type Logger,pino } from "pino"
 
 import { receiveFromRendererOnMain } from "./receiveFromRendererOnMain.js"
 import { ELECTRON_LOG_TYPE } from "./types.js"
