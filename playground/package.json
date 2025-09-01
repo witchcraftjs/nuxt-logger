@@ -5,12 +5,11 @@
 	"scripts": {
 		"dev": "nuxi dev",
 		"build": "nuxi build",
-		"generate": "nuxi generate"
+		"generate": "nuxi generate",
+		"update-dep": "cd ../ && pnpm build:only && cd playground && pnpm update @witchcraft/nuxt-logger"
 	},
 	"dependencies": {
-		"nuxt": "^4.0.1",
-		"pino": "^9.4.0",
-		"pino-pretty": "^11.2.2",
-		"@witchcraft/nuxt-logger": "link:../"
+		"nuxt": "^4.0.3",
+		"@witchcraft/nuxt-logger": "file:../"
 	}
 }
