@@ -76,7 +76,17 @@ export function getBaseOptions(
 		?? "debug"
 
 	const processedAdditionalServerTransportTargets = []
+	const thisContexts =[
+		...(isElectronClient ? ["electron-client"] : []),
+		// might not be available, careful
+		...((import.meta as any)?.electron ? ["electron-main"] : []),
+		...(import.meta.client ? ["client"] : []),
+		...(import.meta.server ? ["server"] : []),
+	]
 	for (const target of additionalServerTransportTargets ?? []) {
+		const contexts = (target as any)._contexts as string[]
+		const contextMatches = contexts === undefined || contexts.find(c => thisContexts.includes(c))
+		if (!contextMatches) continue
 		const propPaths = (target as any)._loadFromEnv as string[]
 		// we have to clone because we can't write to runtimeConfig
 		const clone = walk(target, undefined, { save: true })

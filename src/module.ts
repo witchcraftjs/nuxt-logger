@@ -41,13 +41,14 @@ export interface ModuleOptions {
 	 * Additional transport targets to add to the server transport.
 	 * File and console + pino-pretty are added by default. See disabledServerTransportTargets for disabling a transport.
 	 *
-	 * Since some transports will require options, but passing them via the nuxt config will hard code them, there is an additional `_loadFromEnv` property that can list a list of dot seperated properties to load from `process.env`.
+	 * Since some transports will require options, but passing them via the nuxt config will hard code them, there is an additional `_loadFromEnv` property that can list a list of dot seperated properties to load from `process.env` and `_contexts` to set what context it will run in.
 	 *
 	 * For example, to add `pino-loki`:
 	 * ```ts
 	 * additionalServerTransportTargets: [
 	 *		{
 	 *			target: "pino-loki",
+	 * 		_contexts: ["server"], // can be any of ["server", "client", "electron-client", "electron-main"] (all by default)
 	 *			_loadFromEnv: ["options.host", "options.basicAuth.username", "options.basicAuth.password"],
 	 *			options: {
 	 *				//...
@@ -78,6 +79,7 @@ export interface ModuleOptions {
 	 * You can then create a dashboard based on your labels.
 	 */
 	additionalServerTransportTargets?: (TransportMultiOptions["targets"][number] & {
+		_contexts?: ("server" | "client" | "electron-client" | "electron-main")[]
 		_loadFromEnv: string[]
 	})[]
 	/** Disable a transport target by it's target name. */
