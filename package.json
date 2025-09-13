@@ -50,6 +50,7 @@
 	},
 	"devDependencies": {
 		"@alanscodelog/eslint-config": "^6.2.1",
+		"@alanscodelog/semantic-release-config": "^5.0.4",
 		"@nuxt/eslint-config": "^1.9.0",
 		"@nuxt/module-builder": "^1.0.2",
 		"@nuxt/schema": "^4.0.3",
@@ -60,8 +61,22 @@
 		"eslint": "^9.34.0",
 		"husky": "^9.1.7",
 		"nuxt": "^4.0.3",
+		"semantic-release": "^24.2.8",
 		"typescript": "^5.9.2",
 		"vitest": "^3.2.4",
 		"vue-tsc": "^2.2.12"
+	},
+	"release": {
+		"extends": [
+			"@alanscodelog/semantic-release-config"
+		]
+	},
+	"commitlint": {
+		"extends": [
+			"@alanscodelog"
+		]
+	},
+	"publishConfig": {
+		"access": "public"
 	}
 }
