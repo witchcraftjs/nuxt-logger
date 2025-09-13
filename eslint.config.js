@@ -1,25 +1,18 @@
-import { vueConfig } from "@alanscodelog/eslint-config"
-import { createConfigForNuxt } from "@nuxt/eslint-config/flat"
-
+import {
+	nuxtModuleAppends,
+	nuxtModuleConfig
+} from "@alanscodelog/eslint-config"
+import { createConfigForNuxt } from "@nuxt/eslint-config"
 // Run `npx @eslint/config-inspector` to inspect the resolved config interactively
 export default createConfigForNuxt({
-	features: {
-		tooling: false, // is overriding standalone?
-		stylistic: false,
-		standalone: false
-	},
-	dirs: {
-		src: [
-			"./playground",
-		],
-	},
+	...nuxtModuleConfig
 })
-	.append(
-		...vueConfig,
+	.append([
+		...nuxtModuleAppends,
 		{
 			rules: {
-				// for auto imports
-				"no-undef": "off",
-			}
-		}
-	)
+				"jsdoc/check-tag-names": ["warn", { definedTags: [
+				] }],
+			},
+		},
+	])

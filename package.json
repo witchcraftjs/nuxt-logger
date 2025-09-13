@@ -49,7 +49,7 @@
 		"pino-pretty": "^11.3.0"
 	},
 	"devDependencies": {
-		"@alanscodelog/eslint-config": "^5.0.4",
+		"@alanscodelog/eslint-config": "^6.2.1",
 		"@nuxt/eslint-config": "^1.9.0",
 		"@nuxt/module-builder": "^1.0.2",
 		"@nuxt/schema": "^4.0.3",
