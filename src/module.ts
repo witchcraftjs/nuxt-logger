@@ -25,7 +25,7 @@ export interface ModuleOptions {
 	 * See {@link https://getpino.io/#/docs/redaction?id=redaction Pino redaction options}.
 	 */
 	redact: string[]
-	/** This is "/var/log/testing/${appName}.log". */
+	/** This is "~~/logs/${appName}.log" by default. It's recommended you change it to something like "/var/log/${appName}.log" in production. */
 	serverLogPath?: string
 	/** This is "~~/logs/server.log" by default. */
 	devServerLogPath?: string
@@ -109,7 +109,7 @@ export default defineNuxtModule<ModuleOptions>({
 		options.devServerLogPath ??= await resolvePath("~~/logs/server.log", { alias: nuxt.options.alias })
 		const maybeAppName = (nuxt.options.runtimeConfig.public as any)?.appInfo?.name
 		const appName = options.appName ?? maybeAppName ?? path.basename(await resolvePath("~~", { alias: nuxt.options.alias }))
-		options.serverLogPath ??= `/var/log/testing/${appName}.log`
+		options.serverLogPath ??= await resolvePath(`~~/logs/${appName}.log`, { alias: nuxt.options.alias })
 		if (process.env.NODE_ENV === "development") {
 			if (!await fs.stat(options.devServerLogPath).then(() => true).catch(() => false)) {
 				await fs.mkdir(path.dirname(options.devServerLogPath), {

@@ -32,6 +32,7 @@
 
 <script setup>
 import { useLogger } from "#imports"
+
 const logger = useLogger()
 const loggerMessage = {
 	ns: "client",

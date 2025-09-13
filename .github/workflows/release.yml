@@ -27,9 +27,6 @@ jobs:
 
     - name: Build
       uses: ./.github/actions/composite-build
-      with:
-        USE_LOCKFILE: ${{ secrets.USE_LOCKFILE }}
-
 
     - name: Release
       if: "env.ENABLE_RELEASE == 'true' && ! contains('refs/heads/build ', github.ref)"
