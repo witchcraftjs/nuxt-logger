@@ -11,7 +11,7 @@ export default defineNuxtPlugin({
 				const initialLog: any = { appInfo: config.appInfo }
 				if (window.navigator !== undefined) {
 					initialLog.environmentInfo = {
-						userAgent: navigator.userAgent,
+						userAgent: navigator.userAgent
 					}
 				}
 				useLogger().info({ ns: "client:init", ...initialLog })
@@ -20,6 +20,6 @@ export default defineNuxtPlugin({
 	},
 	env: {
 		// don't run when rendering server-only or island components.
-		islands: false,
-	},
+		islands: false
+	}
 })

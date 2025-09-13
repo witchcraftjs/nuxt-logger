@@ -1,4 +1,4 @@
-import { type useElectronLogger } from "./useElectronLogger.js"
+import type { useElectronLogger } from "./useElectronLogger.js"
 /**
  * Wraps a logger (prefixed the first argument's namespace key with "main:") for use in electron.
  */

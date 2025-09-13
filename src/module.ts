@@ -2,19 +2,15 @@ import {
 	addImportsDir,
 	addPlugin,
 	addServerHandler,
-	addServerImports,
 	addServerImportsDir,
-	addServerPlugin,
-	addServerScanDir,
 	createResolver,
 	defineNuxtModule,
-	resolvePath,
+	resolvePath
 } from "@nuxt/kit"
 import { defu } from "defu"
-import fs from "fs/promises"
-import path from "path"
+import fs from "node:fs/promises"
+import path from "node:path"
 import type { TransportMultiOptions } from "pino"
-
 
 declare module "@nuxt/schema" {
 	interface PublicRuntimeConfig {
@@ -29,7 +25,7 @@ export interface ModuleOptions {
 	 * See {@link https://getpino.io/#/docs/redaction?id=redaction Pino redaction options}.
 	 */
 	redact: string[]
-	/** This is "/var/log/testing/${appName}.log".*/
+	/** This is "/var/log/testing/${appName}.log". */
 	serverLogPath?: string
 	/** This is "~~/logs/server.log" by default. */
 	devServerLogPath?: string
@@ -89,7 +85,7 @@ export interface ModuleOptions {
 export default defineNuxtModule<ModuleOptions>({
 	meta: {
 		name: "logger",
-		configKey: "logger",
+		configKey: "logger"
 	},
 	defaults: {
 		redact: [
@@ -102,17 +98,17 @@ export default defineNuxtModule<ModuleOptions>({
 			`req.headers["x-forwarded-for"]`,
 			`req.headers["set-cookie"]`,
 			// i don't think this is actually sensitive, but just in case
-			`req["sec-websocket-key"]`,
+			`req["sec-websocket-key"]`
 		] as string[],
 		enableServerRequestLogging: false,
 		additionalServerTransportTargets: [],
-		disabledServerTransportTargets: [],
+		disabledServerTransportTargets: []
 	},
 	async setup(options, nuxt) {
 		const { resolve } = createResolver(import.meta.url)
 		options.devServerLogPath ??= await resolvePath("~~/logs/server.log", { alias: nuxt.options.alias })
 		const maybeAppName = (nuxt.options.runtimeConfig.public as any)?.appInfo?.name
-		const appName = options.appName ?? maybeAppName ?? path.basename(await resolvePath("~~",{ alias: nuxt.options.alias }))
+		const appName = options.appName ?? maybeAppName ?? path.basename(await resolvePath("~~", { alias: nuxt.options.alias }))
 		options.serverLogPath ??= `/var/log/testing/${appName}.log`
 		if (process.env.NODE_ENV === "development") {
 			if (!await fs.stat(options.devServerLogPath).then(() => true).catch(() => false)) {
@@ -134,7 +130,7 @@ export default defineNuxtModule<ModuleOptions>({
 				redact: options.redact,
 				logPath: nuxt.options.dev ? options.devServerLogPath : options.serverLogPath,
 				additionalServerTransportTargets: options.additionalServerTransportTargets,
-				disabledServerTransportTargets: options.disabledServerTransportTargets,
+				disabledServerTransportTargets: options.disabledServerTransportTargets
 			}
 		)
 		if (nuxt.options.modules.includes("@witchcraft/nuxt-electron")) {
@@ -150,7 +146,7 @@ export default defineNuxtModule<ModuleOptions>({
 		for (const file of [
 			"./runtime",
 			"./runtime/server/middleware/log",
-			"./runtime/server/utils/useServerLogger",
+			"./runtime/server/utils/useServerLogger"
 		]) {
 			nuxt.options.build.transpile.push(resolve(file))
 		}
@@ -161,18 +157,17 @@ export default defineNuxtModule<ModuleOptions>({
 		if (options.enableServerRequestLogging) {
 			addServerHandler({
 				middleware: true,
-				handler: resolve("./runtime/server/middleware/log"),
+				handler: resolve("./runtime/server/middleware/log")
 			})
 		}
 		addPlugin(resolve("./runtime/plugins/init"))
 
 		nuxt.options.alias["#logger"] = resolve("./runtime")
-		nuxt.hook("vite:extendConfig", (config) => {
+		nuxt.hook("vite:extendConfig", config => {
 		// fixes https://github.com/nuxt/nuxt/issues/13247 partially (also transpiling it breaks it)
 			config.optimizeDeps ??= {}
 			config.optimizeDeps.include ??= []
 			config.optimizeDeps.include.push("pino")
 		})
-	},
+	}
 })
-

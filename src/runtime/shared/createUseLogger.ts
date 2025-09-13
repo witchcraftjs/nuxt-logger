@@ -1,9 +1,8 @@
 import type { RuntimeConfig } from "nuxt/schema"
-import {pino, type Logger } from "pino"
+import { type Logger, pino } from "pino"
 
 import { getBaseOptions } from "../helpers/getBaseOptions.js"
 import type { Levels } from "../types.js"
-
 
 export type BaseLogger = Record<Levels, ((data: any) => void)> & {
 	flush: Logger["flush"]
@@ -16,12 +15,12 @@ const logger: BaseLogger = {} as any
 	* So they both create useLogger by passing in useRuntimeConfig how they can.
 	*/
 export function createUseLogger(
-	rc: () => RuntimeConfig,
+	rc: () => RuntimeConfig
 ) {
 	let initiated = false
 	return function useLogger({
 		redirectTo,
-		redirectAll = true,
+		redirectAll = true
 	}: {
 		redirectTo?: "electron"
 		/**
@@ -40,15 +39,15 @@ export function createUseLogger(
 			const config = rc().public
 			const { opts, transports, browserOpts, debug } = getBaseOptions(config.logger)
 			let transport: any
-			if(import.meta.server) {
+			if (import.meta.server) {
 				transport = pino.transport(transports)
 			}
 			const pinoLogger = pino(
 				{
 					...opts,
 					...(import.meta.client
-				? browserOpts
-				: {}),
+						? browserOpts
+						: {})
 				},
 				transport
 			)

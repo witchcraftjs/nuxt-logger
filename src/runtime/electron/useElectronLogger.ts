@@ -1,14 +1,13 @@
 import { keys } from "@alanscodelog/utils/keys"
-import { type PublicRuntimeConfig } from "@nuxt/schema"
+import type { PublicRuntimeConfig } from "@nuxt/schema"
 import { app, type BrowserWindow } from "electron"
-import path from "path"
-import { type Logger,pino } from "pino"
+import path from "node:path"
+import { type Logger, pino } from "pino"
 
 import { receiveFromRendererOnMain } from "./receiveFromRendererOnMain.js"
 import { ELECTRON_LOG_TYPE } from "./types.js"
 
 import { getBaseOptions } from "../helpers/getBaseOptions.js"
-
 
 declare const globalThis: any
 globalThis.__bundlerPathsOverrides = {
@@ -16,7 +15,7 @@ globalThis.__bundlerPathsOverrides = {
 	"pino-worker-pipeline": `./node_modules/pino/lib/worker-pipeline.js`,
 	"thread-stream-worker": `./node_modules/thread-stream/lib/worker.js`,
 	"pino/file": `./node_modules/pino/file.js`,
-	"pino-pretty": `./node_modules/pino-pretty/index.js`,
+	"pino-pretty": `./node_modules/pino-pretty/index.js`
 }
 const bundlerOverrides = globalThis.__bundlerPathsOverrides
 
@@ -42,7 +41,7 @@ const logger: Record<typeof levels[number], ((data: any) => void)> = {} as any
  * {@link https://github.com/pinojs/pino/blob/master/docs/bundling.md}
  * Using vite's ?worker&url imports almost works (the paths are correct) but something about the transpiling breaks things I think.
  */
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+
 export function useElectronLogger(
 	pinoConfig?: PublicRuntimeConfig["logger"],
 	windows?: () => BrowserWindow[], {
@@ -84,8 +83,8 @@ export function useElectronLogger(
 				(pinoLogger as any)[level](data)
 				const wins = windows()
 				for (const win of wins) {
-					win.webContents.send(ELECTRON_LOG_TYPE.FROM_MAIN_ON_RENDERER
-						, level, data)
+					win.webContents.send(ELECTRON_LOG_TYPE.FROM_MAIN_ON_RENDERER,
+						level, data)
 				}
 			}
 		}
@@ -97,4 +96,3 @@ export function useElectronLogger(
 	}
 	return logger
 }
-

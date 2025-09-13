@@ -1,4 +1,4 @@
-import os from "os"
+import os from "node:os"
 
 import { defineNitroPlugin, useRuntimeConfig, useServerLogger } from "#imports"
 
@@ -12,7 +12,7 @@ export default defineNitroPlugin(_nitroApp => {
 		nodeVersion: process.version,
 		cpu: cpus?.[0]?.model,
 		cpus: cpus.length,
-		totalMem: os.totalmem(),
+		totalMem: os.totalmem()
 	}
 	useServerLogger().info({
 		ns: "server:init",

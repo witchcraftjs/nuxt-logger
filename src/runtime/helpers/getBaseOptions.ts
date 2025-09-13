@@ -4,8 +4,8 @@ import { readable } from "@alanscodelog/utils/readable"
 import { set } from "@alanscodelog/utils/set"
 import { walk } from "@alanscodelog/utils/walk"
 import type { PublicRuntimeConfig } from "@nuxt/schema"
-import  { type LoggerOptions, type TransportMultiOptions } from "pino"
-import {pino} from "pino"
+import type { LoggerOptions, TransportMultiOptions } from "pino"
+import { pino } from "pino"
 
 // normally we would access logger.levels, but because we create
 // the shared config here we can't
@@ -16,7 +16,7 @@ const levels = {
 		warn: 40,
 		info: 30,
 		debug: 20,
-		trace: 10,
+		trace: 10
 	},
 	labels: {
 		10: "trace",
@@ -24,25 +24,24 @@ const levels = {
 		30: "info",
 		40: "warn",
 		50: "error",
-		60: "fatal",
-	},
+		60: "fatal"
+	}
 }
-
 
 const isElectronClient = (typeof window !== "undefined" && "electron" in window && window.electron)
 
 export function getBaseOptions(
-	config: PublicRuntimeConfig["logger"],
+	config: PublicRuntimeConfig["logger"]
 ): {
-		opts: LoggerOptions
-		browserOpts: LoggerOptions
-		transports: TransportMultiOptions
-		debug: {
-			logPath: string
-			writeLevel: string
-			logLevel: string
-		}
-	} {
+	opts: LoggerOptions
+	browserOpts: LoggerOptions
+	transports: TransportMultiOptions
+	debug: {
+		logPath: string
+		writeLevel: string
+		logLevel: string
+	}
+} {
 	// @ts-expect-error the path is wrong on electron's client side
 	// but it's not used anyways
 	if (isElectronClient) { delete config.logPath }
@@ -62,26 +61,26 @@ export function getBaseOptions(
 	const maybeElectronLogWriteLevel = import.meta.client
 		? (window as any).electron?.meta?.env?.LOG_WRITE_LEVEL
 		: undefined
-	const writeLevel: (typeof validLevels)[number] =
-		maybeElectronLogWriteLevel
-		?? maybeElectronLogLevel
-		?? process.env.LOG_WRITE_LEVEL as any
-		?? process.env.LOG_LEVEL as any
-		?? (import.meta.dev ? "debug" : undefined)
-		?? "warn"
-	const logLevel: (typeof validLevels)[number] =
-		maybeElectronLogWriteLevel
-		?? process.env.LOG_LEVEL as any
-		?? (import.meta.dev ? "debug" : undefined)
-		?? "debug"
+	const writeLevel: (typeof validLevels)[number]
+		= maybeElectronLogWriteLevel
+			?? maybeElectronLogLevel
+			?? process.env.LOG_WRITE_LEVEL as any
+			?? process.env.LOG_LEVEL as any
+			?? (import.meta.dev ? "debug" : undefined)
+			?? "warn"
+	const logLevel: (typeof validLevels)[number]
+		= maybeElectronLogWriteLevel
+			?? process.env.LOG_LEVEL as any
+			?? (import.meta.dev ? "debug" : undefined)
+			?? "debug"
 
 	const processedAdditionalServerTransportTargets = []
-	const thisContexts =[
+	const thisContexts = [
 		...(isElectronClient ? ["electron-client"] : []),
 		// might not be available, careful
 		...((import.meta as any)?.electron ? ["electron-main"] : []),
 		...(import.meta.client ? ["client"] : []),
-		...(import.meta.server ? ["server"] : []),
+		...(import.meta.server ? ["server"] : [])
 	]
 	for (const target of additionalServerTransportTargets ?? []) {
 		const contexts = (target as any)._contexts as string[]
@@ -105,31 +104,32 @@ export function getBaseOptions(
 		debug: {
 			logPath,
 			writeLevel,
-			logLevel,
+			logLevel
 		},
 		opts: {
 			redact,
 			// do not under any circumstances change how level looks, it breaks the logging ??? :/
 			level: logLevel,
 			formatters: {
-				bindings: () => ({}),
+				bindings: () => ({})
 			},
-			timestamp: pino.stdTimeFunctions.isoTime,
+			timestamp: pino.stdTimeFunctions.isoTime
 		},
 		browserOpts: {
 			browser: {
 				asObject: false,
 				transmit: isElectronClient
-				? {
-					level: logLevel,
-					send: (level, logEvent) => {
-						if (!logEvent.messages[0]?.ns?.startsWith("main") && levels.values[level] < levels.values[writeLevel]) {
-							logEvent.messages[0].ns &&= `renderer:${logEvent.messages[0].ns}`
-							;(window as any).electron.api.log(logEvent)
+					? {
+							level: logLevel,
+							send: (level, logEvent) => {
+								if (!logEvent.messages[0]?.ns?.startsWith("main") && levels.values[level] < levels.values[writeLevel]) {
+									logEvent.messages[0].ns &&= `renderer:${logEvent.messages[0].ns}`
+									;(window as any).electron.api.log(logEvent)
+								}
+							}
 						}
-					},
-				} : undefined,
-			},
+					: undefined
+			}
 		},
 		transports: {
 			targets: [
@@ -138,19 +138,19 @@ export function getBaseOptions(
 					target: "pino/file",
 					options: {
 						destination: logPath,
-						mkdir: true,
-					},
+						mkdir: true
+					}
 				},
 				{
 					level: logLevel,
 					target: "pino-pretty",
 					options: {
-						colorize: true,
-					},
+						colorize: true
+					}
 				},
-				...(processedAdditionalServerTransportTargets ?? []),
+				...(processedAdditionalServerTransportTargets ?? [])
 			// not sure when target doesn't exist, #future investigate
-			].filter(t => !disabledServerTransportTargets?.includes((t as any).target)),
-		},
+			].filter(t => !disabledServerTransportTargets?.includes((t as any).target))
+		}
 	}
 }

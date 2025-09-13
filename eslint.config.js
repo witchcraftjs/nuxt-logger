@@ -12,7 +12,7 @@ export default createConfigForNuxt({
 		{
 			rules: {
 				"jsdoc/check-tag-names": ["warn", { definedTags: [
-				] }],
-			},
-		},
+				] }]
+			}
+		}
 	])

@@ -28,8 +28,8 @@ importers:
         version: 11.3.0
     devDependencies:
       '@alanscodelog/eslint-config':
-        specifier: ^6.2.1
-        version: 6.2.1(eslint-plugin-import-x@4.16.1(@typescript-eslint/utils@8.42.0(eslint@9.34.0(jiti@2.5.1))(typescript@5.9.2))(eslint-import-resolver-node@0.3.9)(eslint@9.34.0(jiti@2.5.1)))(jiti@2.5.1)(typescript@5.9.2)
+        specifier: ^6.3.0
+        version: 6.3.0(eslint-plugin-import-x@4.16.1(@typescript-eslint/utils@8.42.0(eslint@9.34.0(jiti@2.5.1))(typescript@5.9.2))(eslint-import-resolver-node@0.3.9)(eslint@9.34.0(jiti@2.5.1)))(jiti@2.5.1)(typescript@5.9.2)
       '@alanscodelog/semantic-release-config':
         specifier: ^5.0.4
         version: 5.0.4(typescript@5.9.2)
@@ -84,8 +84,8 @@ packages:
     peerDependencies:
       '@alanscodelog/semantic-release-config': ^5.0.4
 
-  '@alanscodelog/eslint-config@6.2.1':
-    resolution: {integrity: sha512-ObPNnKEgPhxki/DDuUmWq+YTGaoxWG+WJyEXj81dk8cI4yZo6MfNAzr4Gt+SrvWTSRDQveJM0RF+DWXpiwsHzA==}
+  '@alanscodelog/eslint-config@6.3.0':
+    resolution: {integrity: sha512-CjxsKPLd6ojZ5ZgICUiYTZLN1wUoVUK6o9pR/hmNz5iOM1TdbuPWyMEpv6IG33FUZaPpxFUStz35UIBJGGQkkA==}
     engines: {node: '>=20.0.0'}
 
   '@alanscodelog/semantic-release-config@5.0.4':
@@ -6319,7 +6319,7 @@ snapshots:
     dependencies:
       '@alanscodelog/semantic-release-config': 5.0.4(typescript@5.9.2)
 
-  '@alanscodelog/eslint-config@6.2.1(eslint-plugin-import-x@4.16.1(@typescript-eslint/utils@8.42.0(eslint@9.34.0(jiti@2.5.1))(typescript@5.9.2))(eslint-import-resolver-node@0.3.9)(eslint@9.34.0(jiti@2.5.1)))(jiti@2.5.1)(typescript@5.9.2)':
+  '@alanscodelog/eslint-config@6.3.0(eslint-plugin-import-x@4.16.1(@typescript-eslint/utils@8.42.0(eslint@9.34.0(jiti@2.5.1))(typescript@5.9.2))(eslint-import-resolver-node@0.3.9)(eslint@9.34.0(jiti@2.5.1)))(jiti@2.5.1)(typescript@5.9.2)':
     dependencies:
       '@eslint/js': 9.34.0
       '@stylistic/eslint-plugin': 5.3.1(eslint@9.34.0(jiti@2.5.1))

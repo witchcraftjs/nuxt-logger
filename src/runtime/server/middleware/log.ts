@@ -7,7 +7,7 @@ export default defineEventHandler(event => {
 		req: {
 			headers: event.node.req.headers,
 			method: event.node.req.method,
-			url: event.node.req.url,
-		},
+			url: event.node.req.url
+		}
 	})
 })

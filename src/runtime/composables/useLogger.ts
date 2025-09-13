@@ -1,5 +1,5 @@
 import { useRuntimeConfig } from "#app"
 
 import { createUseLogger } from "../shared/createUseLogger.js"
-export const useLogger = createUseLogger(useRuntimeConfig)
 
+export const useLogger = createUseLogger(useRuntimeConfig)
