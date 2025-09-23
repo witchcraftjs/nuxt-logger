@@ -46,7 +46,7 @@ Also redacts the `redact` key, but only in production, so you can put anything s
 The electron logger requires a bit of setup since electron's main cannot be passed the runtime config normally.
 
 This assumes the usage of
-[@witchcraft/nuxt-electron](todo) since it can handle this among other issues. Note this plugin needs to be before it in the plugins list.
+[@witchcraft/nuxt-electron](https://github.com/witchcraftjs/nuxt-electron) since it can handle this among other issues.
 
 There is a full example in the [@witchcraft/nuxt-electron playground](TODO).
 
