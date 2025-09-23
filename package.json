@@ -1,6 +1,6 @@
 {
 	"name": "@witchcraft/nuxt-logger",
-	"version": "0.0.2",
+	"version": "0.0.3",
 	"description": "Nuxt module for logging.",
 	"repository": "witchcraftjs/nuxt-logger",
 	"license": "MIT",
