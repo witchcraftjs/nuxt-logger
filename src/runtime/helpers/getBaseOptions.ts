@@ -116,6 +116,7 @@ export function getBaseOptions(
 			formatters: {
 				bindings: () => ({})
 			},
+			// @ts-expect-error https://github.com/pinojs/pino/issues/2260
 			timestamp: pino.stdTimeFunctions.isoTime
 		},
 		browserOpts: {
