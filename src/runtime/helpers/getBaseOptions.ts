@@ -4,6 +4,7 @@ import { readable } from "@alanscodelog/utils/readable"
 import { set } from "@alanscodelog/utils/set"
 import { walk } from "@alanscodelog/utils/walk"
 import type { PublicRuntimeConfig } from "@nuxt/schema"
+import path from "node:path"
 import type { LoggerOptions, TransportMultiOptions } from "pino"
 import { pino } from "pino"
 
@@ -38,6 +39,7 @@ export function getBaseOptions(
 	transports: TransportMultiOptions
 	debug: {
 		logPath: string
+		resolvedLogPath: string
 		writeLevel: string
 		logLevel: string
 	}
@@ -103,6 +105,7 @@ export function getBaseOptions(
 	return {
 		debug: {
 			logPath,
+			resolvedLogPath: path.resolve(logPath),
 			writeLevel,
 			logLevel
 		},
@@ -137,7 +140,7 @@ export function getBaseOptions(
 					level: writeLevel,
 					target: "pino/file",
 					options: {
-						destination: logPath,
+						destination: path.resolve(logPath),
 						mkdir: true
 					}
 				},

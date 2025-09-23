@@ -5,6 +5,7 @@ import {
 	addServerImportsDir,
 	createResolver,
 	defineNuxtModule,
+	resolveAlias,
 	resolvePath
 } from "@nuxt/kit"
 import { defu } from "defu"
@@ -106,10 +107,10 @@ export default defineNuxtModule<ModuleOptions>({
 	},
 	async setup(options, nuxt) {
 		const { resolve } = createResolver(import.meta.url)
-		options.devServerLogPath ??= await resolvePath("~~/logs/server.log", { alias: nuxt.options.alias })
+		options.devServerLogPath ??= path.relative(nuxt.options.rootDir, resolveAlias("~~/logs/server.log", nuxt.options.alias))
 		const maybeAppName = (nuxt.options.runtimeConfig.public as any)?.appInfo?.name
 		const appName = options.appName ?? maybeAppName ?? path.basename(await resolvePath("~~", { alias: nuxt.options.alias }))
-		options.serverLogPath ??= await resolvePath(`~~/logs/${appName}.log`, { alias: nuxt.options.alias })
+		options.serverLogPath ??= path.relative(nuxt.options.rootDir, resolveAlias(`~~/logs/${appName}.log`, nuxt.options.alias))
 		if (process.env.NODE_ENV === "development") {
 			if (!await fs.stat(options.devServerLogPath).then(() => true).catch(() => false)) {
 				await fs.mkdir(path.dirname(options.devServerLogPath), {
