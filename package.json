@@ -41,7 +41,7 @@
 		"pino-pretty": "^11.2.2"
 	},
 	"dependencies": {
-		"@alanscodelog/tsconfigs": "^6.1.0",
+		"@alanscodelog/tsconfigs": "^6.2.0",
 		"@alanscodelog/utils": "^6.0.1",
 		"@nuxt/kit": "^4.0.3",
 		"defu": "latest",
