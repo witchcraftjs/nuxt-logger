@@ -15,7 +15,8 @@ const logger: BaseLogger = {} as any
 	* So they both create useLogger by passing in useRuntimeConfig how they can.
 	*/
 export function createUseLogger(
-	rc: () => RuntimeConfig
+	rc: () => RuntimeConfig,
+	serverPathResolver?: (path: string) => string
 ) {
 	let initiated = false
 	return function useLogger({
@@ -37,7 +38,7 @@ export function createUseLogger(
 			initiated = true
 
 			const config = rc().public
-			const { opts, transports, browserOpts, debug } = getBaseOptions(config.logger)
+			const { opts, transports, browserOpts, debug } = getBaseOptions(config.logger, serverPathResolver)
 			let transport: any
 			if (import.meta.server) {
 				transport = pino.transport(transports)

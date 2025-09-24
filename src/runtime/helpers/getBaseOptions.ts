@@ -4,7 +4,6 @@ import { readable } from "@alanscodelog/utils/readable"
 import { set } from "@alanscodelog/utils/set"
 import { walk } from "@alanscodelog/utils/walk"
 import type { PublicRuntimeConfig } from "@nuxt/schema"
-import path from "node:path"
 import type { LoggerOptions, TransportMultiOptions } from "pino"
 import { pino } from "pino"
 
@@ -32,7 +31,8 @@ const levels = {
 const isElectronClient = (typeof window !== "undefined" && "electron" in window && window.electron)
 
 export function getBaseOptions(
-	config: PublicRuntimeConfig["logger"]
+	config: PublicRuntimeConfig["logger"],
+	serverPathResolver?: (path: string) => string
 ): {
 	opts: LoggerOptions
 	browserOpts: LoggerOptions
@@ -102,10 +102,11 @@ export function getBaseOptions(
 		delete (clone as any)._loadFromEnv
 	}
 
+	const resolvedLogPath = serverPathResolver?.(logPath) ?? logPath
 	return {
 		debug: {
 			logPath,
-			resolvedLogPath: path.resolve(logPath),
+			resolvedLogPath,
 			writeLevel,
 			logLevel
 		},
@@ -141,7 +142,7 @@ export function getBaseOptions(
 					level: writeLevel,
 					target: "pino/file",
 					options: {
-						destination: path.resolve(logPath),
+						destination: resolvedLogPath,
 						mkdir: true
 					}
 				},
