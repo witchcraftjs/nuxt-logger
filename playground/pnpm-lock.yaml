@@ -17,8 +17,8 @@ importers:
 
 packages:
 
-  '@alanscodelog/tsconfigs@6.1.0':
-    resolution: {integrity: sha512-orwpGGW1RsDdPHzyTXGDfrMtpB/ci0g5D717JSckL+36baek9zJAVPj44otEvWbMVSl849tbkkP5qUgPD/Xnwg==}
+  '@alanscodelog/tsconfigs@6.2.0':
+    resolution: {integrity: sha512-DAGIlj1aJ7oCiNnemx6VLZeOHICMjf2YSxC8VI/uAW+IKpBHQQ1S0udxvPeLYOPgZY69K90Wx+F3jd0clSRDeA==}
     engines: {node: '>=20.0.0'}
 
   '@alanscodelog/utils@6.0.1':
@@ -3932,7 +3932,7 @@ packages:
 
 snapshots:
 
-  '@alanscodelog/tsconfigs@6.1.0': {}
+  '@alanscodelog/tsconfigs@6.2.0': {}
 
   '@alanscodelog/utils@6.0.1': {}
 
@@ -5339,7 +5339,7 @@ snapshots:
 
   '@witchcraft/nuxt-logger@file:..(magicast@0.3.5)(pino-pretty@11.3.0)(pino@9.9.0)':
     dependencies:
-      '@alanscodelog/tsconfigs': 6.1.0
+      '@alanscodelog/tsconfigs': 6.2.0
       '@alanscodelog/utils': 6.0.1
       '@nuxt/kit': 4.0.3(magicast@0.3.5)
       defu: 6.1.4
