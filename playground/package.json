@@ -5,11 +5,10 @@
 	"scripts": {
 		"dev": "nuxi dev",
 		"build": "nuxi build",
-		"generate": "nuxi generate",
-		"update-dep": "cd ../ && pnpm build:only && cd playground && pnpm update @witchcraft/nuxt-logger"
+		"generate": "nuxi generate"
 	},
 	"dependencies": {
-		"nuxt": "^4.0.3",
-		"@witchcraft/nuxt-logger": "file:../"
+		"nuxt": "catalog:",
+		"@witchcraft/nuxt-logger": "workspace:*"
 	}
 }

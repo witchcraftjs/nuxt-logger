@@ -41,30 +41,30 @@
 		"pino-pretty": "^11.2.2"
 	},
 	"dependencies": {
-		"@alanscodelog/tsconfigs": "^6.2.0",
-		"@alanscodelog/utils": "^6.0.1",
-		"@nuxt/kit": "^4.0.3",
+		"@alanscodelog/tsconfigs": "catalog:",
+		"@alanscodelog/utils": "catalog:",
+		"@nuxt/kit": "catalog:",
 		"defu": "latest",
-		"pino": "^9.9.0",
-		"pino-pretty": "^11.3.0"
+		"pino": "catalog:",
+		"pino-pretty": "catalog:"
 	},
 	"devDependencies": {
-		"@alanscodelog/eslint-config": "^6.3.0",
-		"@alanscodelog/semantic-release-config": "^5.0.4",
-		"@nuxt/eslint-config": "^1.9.0",
-		"@nuxt/module-builder": "^1.0.2",
-		"@nuxt/schema": "^4.0.3",
-		"@nuxt/test-utils": "^3.19.2",
+		"@alanscodelog/eslint-config": "catalog:",
+		"@alanscodelog/semantic-release-config": "catalog:",
+		"@nuxt/eslint-config": "catalog:",
+		"@nuxt/module-builder": "catalog:",
+		"@nuxt/schema": "catalog:",
+		"@nuxt/test-utils": "catalog:",
 		"@types/node": "latest",
-		"changelogen": "^0.6.2",
-		"electron": "^34.5.8",
-		"eslint": "^9.34.0",
-		"husky": "^9.1.7",
-		"nuxt": "^4.0.3",
-		"semantic-release": "^24.2.8",
-		"typescript": "^5.9.2",
-		"vitest": "^3.2.4",
-		"vue-tsc": "^2.2.12"
+		"changelogen": "catalog:",
+		"electron": "catalog:",
+		"eslint": "catalog:",
+		"husky": "catalog:",
+		"nuxt": "catalog:",
+		"semantic-release": "catalog:",
+		"typescript": "catalog:",
+		"vitest": "catalog:",
+		"vue-tsc": "catalog:"
 	},
 	"release": {
 		"extends": [
