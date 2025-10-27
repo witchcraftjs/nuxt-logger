@@ -81,6 +81,8 @@ export interface ModuleOptions {
 	})[]
 	/** Disable a transport target by it's target name. */
 	disabledServerTransportTargets?: string[]
+	/** Whether to ensure the log dirs exist (for disabling when using the module in layers) */
+	ensureLogDirs?: boolean
 }
 
 export default defineNuxtModule<ModuleOptions>({
@@ -103,7 +105,8 @@ export default defineNuxtModule<ModuleOptions>({
 		] as string[],
 		enableServerRequestLogging: false,
 		additionalServerTransportTargets: [],
-		disabledServerTransportTargets: []
+		disabledServerTransportTargets: [],
+		ensureLogDirs: true
 	},
 	async setup(options, nuxt) {
 		const { resolve } = createResolver(import.meta.url)
@@ -111,17 +114,19 @@ export default defineNuxtModule<ModuleOptions>({
 		const maybeAppName = (nuxt.options.runtimeConfig.public as any)?.appInfo?.name
 		const appName = options.appName ?? maybeAppName ?? path.basename(await resolvePath("~~", { alias: nuxt.options.alias }))
 		options.serverLogPath ??= path.relative(nuxt.options.rootDir, resolveAlias(`~~/logs/${appName}.log`, nuxt.options.alias))
-		if (process.env.NODE_ENV === "development") {
-			if (!await fs.stat(options.devServerLogPath).then(() => true).catch(() => false)) {
-				await fs.mkdir(path.dirname(options.devServerLogPath), {
-					recursive: true
-				})
-				await fs.writeFile(options.devServerLogPath, "")
-			}
-		} else {
-			if (!await fs.stat(options.serverLogPath).then(() => true).catch(() => false)) {
-				await fs.mkdir(path.dirname(options.serverLogPath), { recursive: true })
-				await fs.writeFile(options.serverLogPath, "")
+		if (options.ensureLogDirs) {
+			if (process.env.NODE_ENV === "development") {
+				if (!await fs.stat(options.devServerLogPath).then(() => true).catch(() => false)) {
+					await fs.mkdir(path.dirname(options.devServerLogPath), {
+						recursive: true
+					})
+					await fs.writeFile(options.devServerLogPath, "")
+				}
+			} else {
+				if (!await fs.stat(options.serverLogPath).then(() => true).catch(() => false)) {
+					await fs.mkdir(path.dirname(options.serverLogPath), { recursive: true })
+					await fs.writeFile(options.serverLogPath, "")
+				}
 			}
 		}
 
