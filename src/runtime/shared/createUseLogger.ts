@@ -2,11 +2,8 @@ import type { RuntimeConfig } from "nuxt/schema"
 import { type Logger, pino } from "pino"
 
 import { getBaseOptions } from "../helpers/getBaseOptions.js"
-import type { Levels } from "../types.js"
+import type { BaseLogger, Levels } from "../types.js"
 
-export type BaseLogger = Record<Levels, ((data: any) => void)> & {
-	flush: Logger["flush"]
-}
 const logger: BaseLogger = {} as any
 
 /**
