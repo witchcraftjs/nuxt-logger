@@ -71,10 +71,10 @@ export function getBaseOptions(
 			?? (import.meta.dev ? "debug" : undefined)
 			?? "warn"
 	const logLevel: (typeof validLevels)[number]
-		= maybeElectronLogWriteLevel
+		= maybeElectronLogLevel
 			?? process.env.LOG_LEVEL as any
 			?? (import.meta.dev ? "debug" : undefined)
-			?? "debug"
+			?? "info"
 
 	const processedAdditionalServerTransportTargets = []
 	const thisContexts = [
