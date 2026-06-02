@@ -16,3 +16,4 @@ coverage
 *.lcov
 .nyc_output
 
+.npmrc
