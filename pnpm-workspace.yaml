@@ -2,13 +2,21 @@ packages:
   - ./
   - playground/
 
+allowBuilds:
+  '@alanscodelog/eslint-config': false
+  '@alanscodelog/tsconfigs': false
+  '@parcel/watcher': false
+  electron: false
+  esbuild: true
+  unrs-resolver: false
+
 allowUnusedPatches: true
 
 catalog:
   '@alanscodelog/eslint-config': ^6.3.1
   '@alanscodelog/semantic-release-config': ^6.0.2
-  '@alanscodelog/tsconfigs': ^6.2.0
-  '@alanscodelog/utils': ^6.0.1
+  '@alanscodelog/tsconfigs': ^6.3.0
+  '@alanscodelog/utils': ^6.2.0
   '@nuxt/eslint-config': ^1.15.2
   '@nuxt/kit': ^4.3.1
   '@nuxt/module-builder': ^1.0.2
@@ -32,3 +40,5 @@ patchedDependencies:
 settings:
   catalogMode: strict
   cleanupUnusedCatalogs: false
+shamefullyHoist: true
+strictPeerDependencies: false
