@@ -1,7 +1,8 @@
 # @witchcraft/nuxt-logger
 
+[![Docs][docs-src]][docs-href]
+[![Release][release-src]][release-href]
 [![npm version][npm-version-src]][npm-version-href]
-[![npm downloads][npm-downloads-src]][npm-downloads-href]
 [![License][license-src]][license-href]
 [![Nuxt][nuxt-src]][nuxt-href]
 
@@ -132,11 +133,12 @@ useLogger().debug({ns: "hello"}) // will also get forwarded if redirectAll is tr
 
 
 <!-- Badges -->
+[docs-src]: https://github.com/witchcraftjs/nuxt-logger/actions/workflows/docs.yml/badge.svg
+[docs-href]: https://github.com/witchcraftjs/nuxt-logger/actions/workflows/docs.yml
+[release-src]: https://github.com/witchcraftjs/nuxt-logger/actions/workflows/release.yml/badge.svg
+[release-href]: https://github.com/witchcraftjs/nuxt-logger/actions/workflows/release.yml
 [npm-version-src]: https://img.shields.io/npm/v/@witchcraft/nuxt-logger/latest.svg?style=flat&colorA=020420&colorB=00DC82
 [npm-version-href]: https://npmjs.com/package/@witchcraft/nuxt-logger
-
-[npm-downloads-src]: https://img.shields.io/npm/dm/@witchcraft/nuxt-logger.svg?style=flat&colorA=020420&colorB=00DC82
-[npm-downloads-href]: https://npmjs.com/package/@witchcraft/nuxt-logger
 
 [license-src]: https://img.shields.io/npm/l/@witchcraft/nuxt-logger.svg?style=flat&colorA=020420&colorB=00DC82
 [license-href]: https://npmjs.com/package/@witchcraft/nuxt-logger
