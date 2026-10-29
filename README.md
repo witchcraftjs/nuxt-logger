@@ -42,6 +42,14 @@ By default redacts some known sensitive keys for the middleware logging requests
 
 Also redacts the `redact` key, but only in production, so you can put anything semi-sensitive in there that you need to inspect in development.
 
+### Server transports
+
+On the server the module adds two transports by default, file logging to `logPath` and pretty console logs through `pino-pretty`.
+
+Pino resolves the pretty transport at runtime from your app, not from this package. With strict dependency isolation (pnpm) or a bundled server (Nitro), that lookup fails and the server crashes with `unable to determine transport target for "pino-pretty"`. Give the app a copy it can find by adding `pino-pretty` to your app dependencies, or turn the pretty transport off with `disabledServerTransportTargets: ["pino-pretty"]`.
+
+In dev the module warns and keeps running without pretty console logs when `pino-pretty` cannot be resolved.
+
 ### Electron
 
 The electron logger requires a bit of setup since electron's main cannot be passed the runtime config normally.

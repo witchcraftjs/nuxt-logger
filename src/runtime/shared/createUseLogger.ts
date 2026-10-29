@@ -38,7 +38,17 @@ export function createUseLogger(
 			const { opts, transports, browserOpts, debug } = getBaseOptions(config.logger, serverPathResolver)
 			let transport: any
 			if (import.meta.server) {
-				transport = pino.transport(transports)
+				try {
+					transport = pino.transport(transports)
+				} catch (e) {
+					const missingTarget = /unable to determine transport target for "([^"]+)"/.exec((e as Error)?.message ?? "")?.[1]
+					if (import.meta.dev && missingTarget === "pino-pretty") {
+						console.warn(`[nuxt-logger] "pino-pretty" could not be resolved, pretty console logs are disabled. Add "pino-pretty" to your app dependencies or set disabledServerTransportTargets: ["pino-pretty"].`)
+						transport = pino.transport({ targets: transports.targets.filter(t => (t as any).target !== "pino-pretty") })
+					} else {
+						throw e
+					}
+				}
 			}
 			const pinoLogger = pino(
 				{
