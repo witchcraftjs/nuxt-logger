@@ -21,7 +21,7 @@ globalThis.__bundlerPathsOverrides = {
 const bundlerOverrides = globalThis.__bundlerPathsOverrides
 
 for (const key of keys(bundlerOverrides)) {
-	bundlerOverrides[key] = path.resolve(bundleOverrides.nodeModulesLocation, bundlerOverrides[key])
+	bundlerOverrides[key] = path.resolve(bundlerOverrides.nodeModulesLocation, bundlerOverrides[key])
 }
 
 let initiated = false
