@@ -11,6 +11,7 @@ import { ELECTRON_LOG_TYPE } from "../types.js"
 
 declare const globalThis: any
 globalThis.__bundlerPathsOverrides = {
+	nodeModulesLocation: app.getAppPath(),
 	"pino-worker": `./node_modules/pino/lib/worker.js`,
 	"pino-worker-pipeline": `./node_modules/pino/lib/worker-pipeline.js`,
 	"thread-stream-worker": `./node_modules/thread-stream/lib/worker.js`,
@@ -19,9 +20,8 @@ globalThis.__bundlerPathsOverrides = {
 }
 const bundlerOverrides = globalThis.__bundlerPathsOverrides
 
-const appPath = app.getAppPath()
 for (const key of keys(bundlerOverrides)) {
-	bundlerOverrides[key] = path.resolve(appPath, bundlerOverrides[key])
+	bundlerOverrides[key] = path.resolve(bundleOverrides.nodeModulesLocation, bundlerOverrides[key])
 }
 
 let initiated = false
@@ -37,16 +37,20 @@ const logger: Record<typeof levels[number], ((data: any) => void)> = {} as any
  * - We can't use useRuntimeConfig so it's injected by using vite define instead ({@link STATIC}).
  * - We need to pass the logPath which is defined at runtime.
  * - We need to use some electron only imports which causes problems for the regular server.
- * - Pino needs to be told were to find it's workers electron side in prod.
+ * - Pino needs to be told were to find it's workers electron side in prod both when using a packed asar and when not.
  * {@link https://github.com/pinojs/pino/blob/master/docs/bundling.md}
  * Using vite's ?worker&url imports almost works (the paths are correct) but something about the transpiling breaks things I think.
+ *
  */
 
 export function useElectronLogger(
 	pinoConfig?: PublicRuntimeConfig["logger"],
-	windows?: () => BrowserWindow[], {
+	windows?: () => BrowserWindow[],
+	{
 		receiveFromRenderer = true
-	}: { receiveFromRenderer?: boolean } = {}
+	}: {
+		receiveFromRenderer?: boolean
+	} = {}
 ) {
 	if (initiated && pinoConfig) {
 		throw new Error("Config can only be passed the first time when initiating.")
