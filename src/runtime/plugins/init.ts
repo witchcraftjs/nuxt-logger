@@ -1,3 +1,5 @@
+import { toRaw } from "vue"
+
 import { defineNuxtPlugin, useRuntimeConfig } from "#imports"
 
 import { useLogger } from "../composables/useLogger"
@@ -7,7 +9,7 @@ export default defineNuxtPlugin({
 	setup(nuxtApp) {
 		if (import.meta.client) {
 			nuxtApp.hook("app:created", () => {
-				const config = useRuntimeConfig().public
+				const config = toRaw(useRuntimeConfig().public)
 				const initialLog: any = { appInfo: config.appInfo }
 				if (window.navigator !== undefined) {
 					initialLog.environmentInfo = {

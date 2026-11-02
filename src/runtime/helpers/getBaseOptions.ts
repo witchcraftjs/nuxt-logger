@@ -7,6 +7,8 @@ import type { PublicRuntimeConfig } from "@nuxt/schema"
 import type { LoggerOptions, TransportMultiOptions } from "pino"
 import { pino } from "pino"
 
+import type { ElectronLoggerApi } from "../electron/preload/createElectronLoggerApi.js"
+
 // normally we would access logger.levels, but because we create
 // the shared config here we can't
 const levels = {
@@ -129,7 +131,7 @@ export function getBaseOptions(
 							send: (level, logEvent) => {
 								if (!logEvent.messages[0]?.ns?.startsWith("main") && levels.values[level] < levels.values[writeLevel]) {
 									logEvent.messages[0].ns &&= `renderer:${logEvent.messages[0].ns}`
-									;(window as any).electron.api.log(logEvent)
+									;((window as any).electron.api as ElectronLoggerApi).log(level, logEvent)
 								}
 							}
 						}
