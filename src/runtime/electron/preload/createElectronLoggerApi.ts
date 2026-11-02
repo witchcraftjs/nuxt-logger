@@ -1,8 +1,7 @@
 import type {	ipcRenderer as IpcRenderer } from "electron"
 
-import { ELECTRON_LOG_TYPE } from "./types.js"
-
-import type { Levels } from "../types.js"
+import type { Levels } from "../../types.js"
+import { ELECTRON_LOG_TYPE } from "../types.js"
 
 export type ElectronLoggerApi = {
 	log: (level: Levels, data: any) => void

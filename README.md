@@ -60,7 +60,8 @@ This assumes the usage of
 There is a full example in the [@witchcraft/nuxt-electron playground](TODO).
 
 ```ts [main.ts]
-import { STATIC, useDevDataDir } from "@witchcraft/nuxt-electron/electron"
+import { useDevDataDir } from "@witchcraft/nuxt-electron/electron/main"
+import { STATIC } from "@witchcraft/nuxt-electron/electron"
 import { ELECTRON } from "@witchcraft/nuxt-logger/electron"
 
 // assuming you stick your active window instances here
@@ -92,7 +93,7 @@ We can setup the apis for two way communication in the preload script.
 ```ts
 // preload.ts
 import { contextBridge, ipcRenderer } from "electron"
-import { createElectronLoggerApi, type ElectronLoggerApi } from "@witchcraft/nuxt-logger/electron"
+import { createElectronLoggerApi, type ElectronLoggerApi } from "@witchcraft/nuxt-logger/electron/preload"
 
 declare global {
 	interface Window {

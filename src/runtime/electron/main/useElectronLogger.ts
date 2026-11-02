@@ -5,9 +5,9 @@ import path from "node:path"
 import { type Logger, pino } from "pino"
 
 import { receiveFromRendererOnMain } from "./receiveFromRendererOnMain.js"
-import { ELECTRON_LOG_TYPE } from "./types.js"
 
-import { getBaseOptions } from "../helpers/getBaseOptions.js"
+import { getBaseOptions } from "../../helpers/getBaseOptions.js"
+import { ELECTRON_LOG_TYPE } from "../types.js"
 
 declare const globalThis: any
 globalThis.__bundlerPathsOverrides = {
