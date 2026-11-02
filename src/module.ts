@@ -171,9 +171,10 @@ export default defineNuxtModule<ModuleOptions>({
 		nuxt.options.alias["#logger"] = resolve("./runtime")
 		nuxt.hook("vite:extendConfig", config => {
 		// fixes https://github.com/nuxt/nuxt/issues/13247 partially (also transpiling it breaks it)
-			config.optimizeDeps ??= {}
-			config.optimizeDeps.include ??= []
-			config.optimizeDeps.include.push("pino")
+			const optimizeDeps = config.optimizeDeps ?? {}
+			optimizeDeps.include ??= []
+			optimizeDeps.include.push("pino")
+			Object.assign(config, { optimizeDeps })
 		})
 	}
 })

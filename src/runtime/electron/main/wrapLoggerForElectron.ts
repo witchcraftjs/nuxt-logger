@@ -6,11 +6,11 @@ export function wrapLoggerForElectron<T extends ReturnType<typeof useElectronLog
 	logger: T,
 	prefix: string = "main:"
 ): T {
-	const res = {}
-	for (const key of Object.keys(logger)) {
+	const res = {} as Record<keyof T, unknown>
+	for (const key of Object.keys(logger) as (keyof T)[]) {
 		res[key] = (...args: any[]) => {
-			logger[key]({ ...args[0], ns: prefix + args[0].ns }, ...args.slice(1))
+			(logger[key] as (...args: any[]) => void)({ ...args[0], ns: prefix + args[0].ns }, ...args.slice(1))
 		}
 	}
-	return res
+	return res as T
 }

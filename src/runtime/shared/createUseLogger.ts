@@ -1,5 +1,5 @@
 import type { RuntimeConfig } from "nuxt/schema"
-import { type Logger, pino } from "pino"
+import pino, { type Logger } from "pino"
 
 import { getBaseOptions } from "../helpers/getBaseOptions.js"
 import type { BaseLogger, Levels } from "../types.js"
