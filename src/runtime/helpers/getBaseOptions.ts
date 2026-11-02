@@ -130,8 +130,11 @@ export function getBaseOptions(
 							level: logLevel,
 							send: (level, logEvent) => {
 								if (!logEvent.messages[0]?.ns?.startsWith("main") && levels.values[level] < levels.values[writeLevel]) {
+									if (logEvent.messages.length > 1) {
+										throw new Error(`[nuxt-logger] electron forwarding accepts only two arguments, the level and a single message, but got ${logEvent.messages.length} messages in a "${level}" log.`)
+									}
 									logEvent.messages[0].ns &&= `renderer:${logEvent.messages[0].ns}`
-									;((window as any).electron.api as ElectronLoggerApi).log(level, logEvent)
+									;((window as any).electron.api as ElectronLoggerApi).log(level, logEvent.messages[0])
 								}
 							}
 						}
