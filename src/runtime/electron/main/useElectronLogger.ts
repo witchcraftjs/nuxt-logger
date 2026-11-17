@@ -67,9 +67,16 @@ export function useElectronLogger(
 
 		const { opts, transports, debug } = getBaseOptions(pinoConfig)
 
+		const transport = pino.transport(transports)
+		transport.on("error", error => {
+			// the worker died after startup, later writes would throw an uncaught dialog, log the death and exit instead
+			console.error(`[@witchcraft/nuxt-logger] electron transport failed: ${error.message}`)
+			app.exit(1)
+		})
+
 		const pinoLogger = pino(
 			opts,
-			pino.transport(transports)
+			transport
 		)
 
 		for (const level of levels) {
@@ -84,7 +91,13 @@ export function useElectronLogger(
 						throw new Error(`Namespace on electron's main side must start with "main:", got ${data.ns} instead in log: ${JSON.stringify(data)}.`)
 					}
 				}
-				(pinoLogger as any)[level](data)
+				try {
+					(pinoLogger as any)[level](data)
+				} catch (error) {
+					// the transport worker died between writes, a throw here would be an uncaught dialog
+					console.error(`[@witchcraft/nuxt-logger] electron transport failed: ${(error as Error).message}`, data)
+					app.exit(1)
+				}
 				const wins = windows()
 				for (const win of wins) {
 					win.webContents.send(ELECTRON_LOG_TYPE.FROM_MAIN_ON_RENDERER,
